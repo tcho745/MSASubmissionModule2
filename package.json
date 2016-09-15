@@ -1,0 +1,23 @@
+{
+  "name": "msasubmissionmodule2",
+  "version": "1.0.0",
+  "description": "this is a submission document for msa submission 2016",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tcho745/MSASubmissionModule2.git"
+  },
+  "author": "John Cho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tcho745/MSASubmissionModule2/issues"
+  },
+  "homepage": "https://github.com/tcho745/MSASubmissionModule2#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.0"
+  }
+}
