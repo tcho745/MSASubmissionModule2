@@ -1,5 +1,5 @@
 html { 
-    background: url("http://theme.dima-lab.com/okab/images/landing-page-iphone/blurred-home-bg.jpg") no-repeat center center fixed; 
+    background: url("http://www.movilwebapps.com/wp-content/uploads/2014/06/dise%C3%B1owebmobileapps.jpg") no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -7,7 +7,7 @@ html {
 }
 
 body {
-    color: blue;
+    color: white;
     background-color: transparent;
 }
 
@@ -37,3 +37,5 @@ body #page-container {
 input#my-file-selector {
     display:none;
 }
+
+img#share_button {cursor: pointer;}
