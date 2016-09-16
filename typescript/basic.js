@@ -5,8 +5,9 @@ var appname = $("#appname")[0];
 var pageheader = $("#page-header")[0];
 var pagecontainer = $("#page-container")[0];
 var textSelector = $("textInput").val();
-var inputBttn = $("#inputBttn")[0];
-inputBttn.addEventListener("click", function () {
+var inputBttn = $("#inputBttn");
+
+function buttonclick() {
     if (textSelector = null) {
         pageheader.innerHTML = "Please insert what you are thinking of";
     }
@@ -19,7 +20,8 @@ inputBttn.addEventListener("click", function () {
             changeUI();
         });
     }
-});
+};
+inputBttn.addEventListener("click", buttonclick);
 function changeUI() {
     //Show detected mood
     appname.innerHTML = "Your mood is: " + currentMood.name;
@@ -43,21 +45,20 @@ function sendTextRequest(file, callback) {
         data: file
     })
         .done(function (data) {
-        if (data.length != 0) {
-            // Get the emotion scores
-            var detectedLanguages = data[0].detectedLanguages;
-            callback(detectedLanguages);
-        }
-        else {
-            pageheader.innerHTML = "Hmm, we can't seem to detect your input. Try another?";
-        }
-    })
+            if (data.length != 0) {
+                // Get the emotion scores
+                var detectedLanguages = data[0].detectedLanguages;
+                callback(detectedLanguages);
+            }
+            else {
+                pageheader.innerHTML = "Hmm, we can't seem to detect your input. Try another?";
+            }
+        })
         .fail(function (error) {
-        pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
-        console.log(error.getAllResponseHeaders());
-    });
-}
-;
+            pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
+            console.log(error.getAllResponseHeaders());
+        });
+};
 var Mood = (function () {
     function Mood(mood, emojiurl) {
         this.mood = mood;
@@ -90,8 +91,7 @@ function getCurrMood(detectedLanguages) {
         currentMood = neutral;
     }
     return currentMood;
-}
-;
+};
 $(document).ready(function () {
     $('#share_button').click(function (e) {
         e.preventDefault();

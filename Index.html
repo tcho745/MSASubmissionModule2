@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Your feeling</title>
-    </head>
-    <body>
-       <div id="fb-root"></div>
-<script>
+
+<head>
+    <title>Your feeling</title>
+</head>
+
+<body>
+    <div id="fb-root"></div>
+    <script>
 window.fbAsyncInit = function() {
 FB.init({appId: '1689718901346950', status: true, cookie: true,
 xfbml: true});
@@ -19,22 +21,22 @@ document.getElementById('fb-root').appendChild(e);
 </script>
 
 
-<div class="container" id="page-container">
-    <h1 id="app-name">
-        <span class="glyphicon glyphicon-star"></span> Get your language and how feel!
-    </h1>
-    <h2 id="page-header">Type in what you are thinking of below</h2>
-    <form><input type="text" size="10" maxlength="100" id="textInput"></form>
-    <div class="btn-wrapper">        
-        <button type="button" class="btn-info" id="inputBttn">Submit</button>
+    <div class="container" id="page-container">
+        <h1 id="app-name">
+            <span class="glyphicon glyphicon-star"></span> Get your language and how feel!
+        </h1>
+        <h2 id="page-header">Type in what you are thinking of below</h2>
+        <form><input type="text" size="10" maxlength="100" id="textInput"></form>
+        <div class="btn-wrapper">
+            <button type="button" class="btn-info" id="inputBttn">Submit</button>
+        </div>
+        <img src="share_button2.png" id="share_button">
     </div>
-    <img src = "share_button2.png" id = "share_button">
-</div>
-<link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="./css/style.css">
-<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="./node_modules/jquery/dist/jquery.min.js"></script>
-<script src="./typescript/basic.js"></script>
+    <link rel="stylesheet" type="text/css" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./typescript/basic.js"></script>
 </body>
 
 </html>

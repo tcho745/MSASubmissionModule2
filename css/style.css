@@ -15,10 +15,6 @@ h1#app-name {
     font-size:76px;
 }
 
-button#refreshbtn {
-    display:none;
-}
-
 h2#page-header {
     padding-top:20px;
     padding-bottom:20px;
@@ -41,5 +37,9 @@ input#my-file-selector {
 img#share_button {cursor: pointer;}
 
 #textInput {
-    color: #FFFFFF; font-family: Verdana; font-weight: bold; font-size: 12px; background-color: #72A4D2;
+    color: #FFFFFF; 
+    font-family: Verdana; 
+    font-weight: bold; 
+    font-size: 12px; 
+    background-color: #72A4D2;
 }
