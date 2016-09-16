@@ -4,7 +4,7 @@ var language;
 var appname = $("#appname")[0];
 var pageheader = $("#page-header")[0];
 var pagecontainer = $("#page-container")[0];
-var textSelector = $("#text-input")[0];
+var textSelector = $("textInput").val();
 var inputBttn = $("#inputBttn")[0];
 inputBttn.addEventListener("click", function () {
     if (textSelector = null) {
@@ -13,7 +13,7 @@ inputBttn.addEventListener("click", function () {
     else {
         appname.innerHTML = "Just a sec while we analyse...";
         pageheader.innerHTML = "";
-        sendEmotionRequest(textSelector, function (detectedLanguages) {
+        sendTextRequest(textSelector, function (detectedLanguages) {
             currentMood = getCurrMood(detectedLanguages);
             language = detectedLanguages.name;
             changeUI();
@@ -31,7 +31,7 @@ function changeUI() {
     //Remove offset at the top
     pagecontainer.style.marginTop = "20px";
 }
-function sendEmotionRequest(file, callback) {
+function sendTextRequest(file, callback) {
     $.ajax({
         url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/languages?",
         beforeSend: function (xhrObj) {

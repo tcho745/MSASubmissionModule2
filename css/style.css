@@ -39,3 +39,7 @@ input#my-file-selector {
 }
 
 img#share_button {cursor: pointer;}
+
+#textInput {
+    color: #FFFFFF; font-family: Verdana; font-weight: bold; font-size: 12px; background-color: #72A4D2;
+}
