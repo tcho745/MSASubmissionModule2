@@ -1,27 +1,31 @@
 var currentMood;
 // Get elements from DOM
 var language;
-var appname = $("#appname")[0];
+var appname = $("#app-name")[0];
 var pageheader = $("#page-header")[0];
 var pagecontainer = $("#page-container")[0];
-var textSelector = $("textInput").val();
-var inputBttn = $("#inputBttn");
+var inputBttn = $("#inputBttn")[0];
+var textSelector = $("#textInput")[0];
+var textToJson = {
+    id: "string",
+    text: String(textSelector.value)
+}
+var jsonText = JSON.stringify({ documents: textToJson}, null, '\t');
 
-function buttonclick() {
-    if (textSelector = null) {
+inputBttn.addEventListener("click", function () {
+    if (textSelector.value == "") {
         pageheader.innerHTML = "Please insert what you are thinking of";
     }
     else {
         appname.innerHTML = "Just a sec while we analyse...";
         pageheader.innerHTML = "";
-        sendTextRequest(textSelector, function (detectedLanguages) {
+        sendTextRequest(jsonText, function (detectedLanguages) {
             currentMood = getCurrMood(detectedLanguages);
             language = detectedLanguages.name;
             changeUI();
         });
     }
-};
-inputBttn.addEventListener("click", buttonclick);
+});
 function changeUI() {
     //Show detected mood
     appname.innerHTML = "Your mood is: " + currentMood.name;
@@ -35,39 +39,30 @@ function changeUI() {
 }
 function sendTextRequest(file, callback) {
     $.ajax({
-        url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/languages?",
+        url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/languages",
         beforeSend: function (xhrObj) {
             // Request headers
-            xhrObj.setRequestHeader("Content-Type", "application/json");
+            xhrObj.setRequestHeader("Content-Type", "text/json");
             xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "3d52b1f257d54d19b59a2ac42e203d90");
         },
         type: "POST",
         data: file
     })
         .done(function (data) {
-            if (data.length != 0) {
-                // Get the emotion scores
-                var detectedLanguages = data[0].detectedLanguages;
-                callback(detectedLanguages);
-            }
-            else {
-                pageheader.innerHTML = "Hmm, we can't seem to detect your input. Try another?";
-            }
-        })
+        if (data.length != 0) {
+            var detectedLanguage = data.documents[0].detectedLanguages;
+            callback(detectedLanguage);
+        }
+        else {
+            pageheader.innerHTML = "Hmm, we can't seem to detect your input. Try another?";
+        }
+    })
         .fail(function (error) {
-            pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
-            console.log(error.getAllResponseHeaders());
-        });
-};
-var Mood = (function () {
-    function Mood(mood, emojiurl) {
-        this.mood = mood;
-        this.emojiurl = emojiurl;
-        this.name = mood;
-        this.emoji = emojiurl;
-    }
-    return Mood;
-});
+        pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
+        console.log(error.getAllResponseHeaders());
+    });
+}
+;
 var Mood = (function () {
     function Mood(mood, emojiurl) {
         this.mood = mood;
@@ -91,7 +86,8 @@ function getCurrMood(detectedLanguages) {
         currentMood = neutral;
     }
     return currentMood;
-};
+}
+;
 $(document).ready(function () {
     $('#share_button').click(function (e) {
         e.preventDefault();

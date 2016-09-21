@@ -1,19 +1,26 @@
 var currentMood: Mood;
 // Get elements from DOM
-var language
-var appname = $("#appname")[0]
+var language;
+var appname = $("#app-name")[0];
 var pageheader = $("#page-header")[0];
 var pagecontainer = $("#page-container")[0];
-var textSelector = $("#text-input")[0];
 var inputBttn = $("#inputBttn")[0];
+var textSelector = $("#textInput")[0];
+
+var textToJSON: Object = { id: "string", text: textSelector.value };
+
+var memberfilter = new Array();
+memberfilter[0] = "id";
+memberfilter[1] = "text";
+var jsonText : string = JSON.stringify(textToJSON, memberfilter, "\t");
 
 inputBttn.addEventListener("click", function () {
-    if (textSelector = null) {
+    if (textSelector.value == "") {
         pageheader.innerHTML = "Please insert what you are thinking of"
     } else {
         appname.innerHTML = "Just a sec while we analyse...";
         pageheader.innerHTML = "";
-        sendEmotionRequest(textSelector, function (detectedLanguages) {
+        sendTextRequest(jsonText, function (detectedLanguages) {
             currentMood = getCurrMood(detectedLanguages);
             language = detectedLanguages.name
             changeUI();
@@ -34,23 +41,24 @@ function changeUI(): void {
     pagecontainer.style.marginTop = "20px";
 }
 
-function sendEmotionRequest(file, callback): void {
+function sendTextRequest(file, callback): void {
     $.ajax({
-        url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/languages?",
+        url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/languages",
         beforeSend: function (xhrObj) {
             // Request headers
-            xhrObj.setRequestHeader("Content-Type", "application/json");
+            xhrObj.setRequestHeader("Content-Type", "text/json");
             xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "3d52b1f257d54d19b59a2ac42e203d90");
         },
         type: "POST",
-        data: file,
+        data: file
     })
         .done(function (data) {
-            if (data.length != 0) { // if a face is detected
+            if (data.length != 0) {
                 // Get the emotion scores
                 var detectedLanguages = data[0].detectedLanguages;
                 callback(detectedLanguages);
-            } else {
+            }
+            else {
                 pageheader.innerHTML = "Hmm, we can't seem to detect your input. Try another?";
             }
         })
@@ -69,16 +77,6 @@ class Mood {
         this.emoji = emojiurl;
     }
 }
-
-var Mood = (function () {
-    function Mood(mood, emojiurl) {
-        this.mood = mood;
-        this.emojiurl = emojiurl;
-        this.name = mood;
-        this.emoji = emojiurl;
-    }
-    return Mood;
-});
 
 var happy = new Mood("happy", "http://emojipedia-us.s3.amazonaws.com/cache/a0/38/a038e6d3f342253c5ea3c057fe37b41f.png");
 var sad = new Mood("sad", "https://cdn.shopify.com/s/files/1/1061/1924/files/Sad_Face_Emoji.png?9898922749706957214");
