@@ -1,93 +1,34 @@
-var currentMood;
 // Get elements from DOM
 var language;
 var appname = $("#app-name")[0];
 var pageheader = $("#page-header")[0];
 var pagecontainer = $("#page-container")[0];
-var inputBttn = $("#inputBttn")[0];
-var textSelector = $("#textInput")[0];
-var textToJson = {
-    id: "string",
-    text: String(textSelector.value)
-}
-var jsonText = JSON.stringify({ documents: textToJson}, null, '\t');
-
-inputBttn.addEventListener("click", function () {
-    if (textSelector.value == "") {
-        pageheader.innerHTML = "Please insert what you are thinking of";
-    }
-    else {
-        appname.innerHTML = "Just a sec while we analyse...";
-        pageheader.innerHTML = "";
-        sendTextRequest(jsonText, function (detectedLanguages) {
-            currentMood = getCurrMood(detectedLanguages);
-            language = detectedLanguages.name;
-            changeUI();
-        });
-    }
+var changeBttn = $("#changeBttn")[0];
+var city = $("#city")[0];
+var country = $("#country")[0];
+changeBttn.addEventListener("click", function () {
+    appname.innerHTML = "Just a sec while we retrive the weather...";
+    pageheader.innerHTML = "";
+    changeUI();
 });
 function changeUI() {
-    //Show detected mood
-    appname.innerHTML = "Your mood is: " + currentMood.name;
-    pageheader.innerHTML = "your detected language is: " + language;
-    //Show mood emoji
-    var img = $("#selected-img")[0];
-    img.src = currentMood.emoji;
-    img.style.display = "block";
-    //Remove offset at the top
-    pagecontainer.style.marginTop = "20px";
-}
-function sendTextRequest(file, callback) {
     $.ajax({
-        url: "https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/languages",
-        beforeSend: function (xhrObj) {
-            // Request headers
-            xhrObj.setRequestHeader("Content-Type", "text/json");
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "3d52b1f257d54d19b59a2ac42e203d90");
+        url: "http://api.wunderground.com/api/9622e93f368b974d/geolookup/conditions/q/" + country.value + "/" + city.value + ".json",
+        dataType: "jsonp",
+        success: function (parsed_json) {
+            var location = parsed_json['location']['city'];
+            var temp_c = parsed_json['current_observation']['temp_c'];
+            var time = parsed_json['current_observation']['local_time_rfc822'];
+            appname.innerHTML = "You are currently at " + location + " at " + time;
+            pageheader.innerHTML = "The observed temperature is " + temp_c + "degrees Celcius";
+            pagecontainer.style.marginTop = "20px";
         },
-        type: "POST",
-        data: file
-    })
-        .done(function (data) {
-        if (data.length != 0) {
-            var detectedLanguage = data.documents[0].detectedLanguages;
-            callback(detectedLanguage);
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Status: " + textStatus);
+            alert("Error: " + errorThrown);
         }
-        else {
-            pageheader.innerHTML = "Hmm, we can't seem to detect your input. Try another?";
-        }
-    })
-        .fail(function (error) {
-        pageheader.innerHTML = "Sorry, something went wrong. :( Try again in a bit?";
-        console.log(error.getAllResponseHeaders());
     });
 }
-;
-var Mood = (function () {
-    function Mood(mood, emojiurl) {
-        this.mood = mood;
-        this.emojiurl = emojiurl;
-        this.name = mood;
-        this.emoji = emojiurl;
-    }
-    return Mood;
-});
-var happy = new Mood("happy", "http://emojipedia-us.s3.amazonaws.com/cache/a0/38/a038e6d3f342253c5ea3c057fe37b41f.png");
-var sad = new Mood("sad", "https://cdn.shopify.com/s/files/1/1061/1924/files/Sad_Face_Emoji.png?9898922749706957214");
-var neutral = new Mood("neutral", "https://cdn.shopify.com/s/files/1/1061/1924/files/Neutral_Face_Emoji.png?9898922749706957214");
-function getCurrMood(detectedLanguages) {
-    if (detectedLanguages.score > 0.7) {
-        currentMood = happy;
-    }
-    else if (detectedLanguages.score < 0.4) {
-        currentMood = sad;
-    }
-    else {
-        currentMood = neutral;
-    }
-    return currentMood;
-}
-;
 $(document).ready(function () {
     $('#share_button').click(function (e) {
         e.preventDefault();
