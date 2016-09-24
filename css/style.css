@@ -36,7 +36,7 @@ input#my-file-selector {
 
 img#share_button {cursor: pointer;}
 
-#textInput {
+#country, #city {
     color: #FFFFFF; 
     font-family: Verdana; 
     font-weight: bold; 
